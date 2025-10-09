@@ -15,15 +15,9 @@ const Navigation = ({ text }) => {
   };
 
   return (
-    <div className="flex lg:flex-row md:flex-row flex-col justify-between md:items-center gap-2 lg:items-center">
-      <div
-        className="flex lg:block md:block hidden items-center px-4 gap-2 cursor-pointer text-sm font-semibold hover:opacity-80"
-        onClick={handleBack}
-      >
-        <ArrowLeftCircle />
-        <p>Kembali</p>
-      </div>
-      <p className="font-bold text-lg uppercase cursor-default bg-green-700 text-white px-6 py-2 rounded-md">
+    <div className="flex lg:flex-row md:flex-row flex-col justify-end md:items-center gap-2 lg:items-center">
+     
+      <p className="font-bold text-center text-lg uppercase cursor-default bg-green-700 text-white px-6 py-2 rounded-md">
         {text}
       </p>
     </div>

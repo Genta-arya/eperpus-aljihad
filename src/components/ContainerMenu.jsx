@@ -9,8 +9,8 @@ const ContainerMenu = ({ children, text }) => {
       <div className="mt-2">
         <Navigation text={text} />
       </div>
-      <div className=" bg-white pl-2 mt-4">
-        <div className=" py-2  ">{children}</div>
+      <div className=" bg-white mt-4">
+        <div className=" py-2 text-xs  ">{children}</div>
       </div>
     </>
   );

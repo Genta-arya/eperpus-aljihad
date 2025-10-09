@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Home, Menu, X } from "lucide-react";
 
@@ -24,6 +24,14 @@ const BottomNavigation = () => {
     },
   ];
 
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [isMenuOpen]);
+
   if (location.pathname.startsWith("/laporan/")) return null;
 
   return (
@@ -35,7 +43,7 @@ const BottomNavigation = () => {
             onClick={() => (item.path ? navigate(item.path) : item.action?.())}
             className={`flex flex-col items-center text-xs ${
               location.pathname === item.path
-                ? "text-blue-600"
+                ? "text-green-600"
                 : "text-gray-500"
             }`}
           >

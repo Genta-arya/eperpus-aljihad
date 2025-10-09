@@ -3,7 +3,7 @@ import { ClipLoader } from "react-spinners"; // Import spinner dari react-spinne
 
 const Loading = () => {
   return (
-    <div className="flex flex-col items-center  justify-center min-h-screen  bg-gray-100 animate-pulse">
+    <div className="flex flex-col items-center  justify-center min-h-screen   animate-pulse">
       <ClipLoader color="#15803d" loading={true} size={50} />
     </div>
   );

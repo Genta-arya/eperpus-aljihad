@@ -9,9 +9,9 @@ const MenuHomePage = () => {
   };
 
   return (
-    <div className="lg:max-w-[60%] w-full -mt-20 z-10 mx-auto px-4">
+    <div className="lg:max-w-[85%] md:max-w-[90%] w-full md:-mt-5 -mt-44 z-10 mx-auto ">
       {/* Card */}
-      <div className="bg-white shadow-lg rounded-xl lg:p-10 p-6 border border-gray-100">
+      <div className="bg-white shadow-lg lg:p-10 p-6 border border-gray-100">
         {/* Search Bar */}
         <div className="flex items-center gap-2 mb-6">
           <div className="relative flex-1">

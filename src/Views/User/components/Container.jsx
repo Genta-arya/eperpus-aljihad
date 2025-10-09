@@ -5,7 +5,7 @@ const Container = ({ children }) => {
   return (
     <>
 
-      <div className="container flex justify-center items-center ">{children}</div>
+      <div className="flex flex-col  justify-center items-center ">{children}</div>
     </>
   );
 };

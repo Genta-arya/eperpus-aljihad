@@ -32,6 +32,7 @@ const Navbar = () => {
           <img src="/Icon.png" alt="Logo" className="w-14" />
           <div>
             <h1 className="text-lg font-bold text-green-700">E-Perpustakaan</h1>
+            <p className="text-sm font-bold">AL-JIHAD Islamic Studies Center</p>
           </div>
         </div>
 

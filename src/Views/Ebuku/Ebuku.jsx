@@ -448,153 +448,156 @@ const Ebook = () => {
   if (loading) return <Loading />;
 
   return (
-    <ContainerMenu text={title}>
-      <div className="flex items-center justify-between mb-4">
-        <button
-          onClick={handleOpenTambah}
-          className="flex items-center gap-2 bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-800 transition-all"
-        >
-          <FaPlus /> Tambah E-Buku
-        </button>
-      </div>
+    <>
+      {!showEdit && !showTambah && (
+        <ContainerMenu text={title}>
+          <div className="flex items-center justify-between mb-4">
+            <button
+              onClick={handleOpenTambah}
+              className="flex items-center gap-2 bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-800 transition-all"
+            >
+              <FaPlus /> Tambah E-Buku
+            </button>
+          </div>
 
-      <div className="flex gap-2 mb-4 relative w-full">
-        <input
-          type="text"
-          placeholder="Cari..."
-          className="border rounded-md relative w-full px-3 py-2 outline-none focus:ring-2 focus:ring-green-600 pr-10"
-          value={searchKeyword}
-          onChange={(e) => setSearchKeyword(e.target.value)}
-        />
-        {/* Button clear */}
-        {searchKeyword && (
-          <button
-            type="button"
-            onClick={() => handleClear()}
-            className="absolute right-28 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800"
-          >
-            {/* icon reaload */}
-            <FaSync />
-          </button>
-        )}
-        <button
-          onClick={handleSearch}
-          className="px-4 py-2 bg-green-700 text-white rounded-md flex items-center gap-2 hover:bg-green-800"
-        >
-          <FaSearch /> Cari
-        </button>
-      </div>
-      <div className="-mb-10">
-        <Pagination
-          pagination={pagination}
-          onChange={({ page, limit }) => {
-            fetchDataBuku(page, limit);
-          }}
-        />
-      </div>
-
-      {/* Table */}
-      <div className={tableWrapper}>
-        <table className={tableBase}>
-          <thead className={theadClass}>
-            <tr>
-              <th className={thClass}>#</th>
-              <th className={thClass}>Cover</th>
-              <th className={thClass}>Judul</th>
-              <th className={thClass}>Penulis</th>
-              <th className={thClass}>Penerbit</th>
-              <th className={thClass}>ISBN</th>
-              <th className={thClass}>Tahun</th>
-              <th className={thClass}>Halaman</th>
-              <th className={thClass}>Kategori</th>
-              <th className={thClass}>Unit Pendidikan</th>
-              <th className={thClass}>File PDF</th>
-              <th className={thClass}>Aksi</th>
-            </tr>
-          </thead>
-          <tbody className={tbodyClass}>
-            {buku.map((item, index) => (
-              <tr key={item.id} className={trHoverClass}>
-                <td className={tdClass}>
-                  {index + 1 + (pagination.page - 1) * pagination.limit}
-                </td>
-                <td className={tdClass}>
-                  {item.cover ? (
-                    <img
-                      onClick={() => window.open(item.cover)}
-                      src={item.cover}
-                      alt={item.judul}
-                      className="w-12 h-16 cursor-pointer object-cover rounded"
-                    />
-                  ) : (
-                    <div className="w-12 h-16 bg-gray-200 flex items-center justify-center text-gray-500 rounded">
-                      <FaImage />
-                    </div>
-                  )}
-                </td>
-                <td className={tdClass}>{item.judul}</td>
-                <td className={tdClass}>{item.penulis}</td>
-                <td className={tdClass}>{item.penerbit}</td>
-                <td className={tdClass}>{item.isbn}</td>
-                <td className={tdClass}>{item.tahun}</td>
-                <td className={tdClass}>{item.halaman}</td>
-                <td className={tdClass}>{item.kategori?.name}</td>
-                <td className={tdClass}>{item.type?.name}</td>
-                <td className={tdClass}>
-                  {item.file ? (
-                    <a
-                      href={item.file}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline"
-                    >
-                      Lihat
-                    </a>
-                  ) : (
-                    "-"
-                  )}
-                </td>
-                <td className={`${tdClass} flex gap-3`}>
-                  <button
-                    onClick={() => handleOpenEdit(item)}
-                    className="text-blue-600 hover:text-blue-800 transition"
-                  >
-                    <FaEdit />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(item.id)}
-                    className="text-red-600 hover:text-red-800 transition"
-                  >
-                    <FaTrash />
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {buku.length === 0 && loading && (
-              <tr>
-                <td
-                  colSpan="12"
-                  className={`${tdClass} text-center text-gray-500`}
-                >
-                  Tidak ada data E-Buku.
-                </td>
-              </tr>
+          <div className="flex gap-2 mb-4 relative w-full">
+            <input
+              type="text"
+              placeholder="Cari..."
+              className="border rounded-md relative w-full px-3 py-2 outline-none focus:ring-2 focus:ring-green-600 pr-10"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+            />
+            {/* Button clear */}
+            {searchKeyword && (
+              <button
+                type="button"
+                onClick={() => handleClear()}
+                className="absolute right-28 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800"
+              >
+                {/* icon reaload */}
+                <FaSync />
+              </button>
             )}
-          </tbody>
-        </table>
-      </div>
+            <button
+              onClick={handleSearch}
+              className="px-4 py-2 bg-green-700 text-white rounded-md flex items-center gap-2 hover:bg-green-800"
+            >
+              <FaSearch /> Cari
+            </button>
+          </div>
+          <div className="-mb-10">
+            <Pagination
+              pagination={pagination}
+              onChange={({ page, limit }) => {
+                fetchDataBuku(page, limit);
+              }}
+            />
+          </div>
 
-      <Pagination
-        pagination={pagination}
-        onChange={({ page, limit }) => {
-          fetchDataBuku(page, limit);
-        }}
-      />
+          {/* Table */}
+          <div className={tableWrapper}>
+            <table className={tableBase}>
+              <thead className={theadClass}>
+                <tr>
+                  <th className={thClass}>#</th>
+                  <th className={thClass}>Cover</th>
+                  <th className={thClass}>Judul</th>
+                  <th className={thClass}>Penulis</th>
+                  <th className={thClass}>Penerbit</th>
+                  <th className={thClass}>ISBN</th>
+                  <th className={thClass}>Tahun</th>
+                  <th className={thClass}>Halaman</th>
+                  <th className={thClass}>Kategori</th>
+                  <th className={thClass}>Unit Pendidikan</th>
+                  <th className={thClass}>File PDF</th>
+                  <th className={thClass}>Aksi</th>
+                </tr>
+              </thead>
+              <tbody className={tbodyClass}>
+                {buku.map((item, index) => (
+                  <tr key={item.id} className={trHoverClass}>
+                    <td className={tdClass}>
+                      {index + 1 + (pagination.page - 1) * pagination.limit}
+                    </td>
+                    <td className={tdClass}>
+                      {item.cover ? (
+                        <img
+                          onClick={() => window.open(item.cover)}
+                          src={item.cover}
+                          alt={item.judul}
+                          className="w-12 h-16 cursor-pointer object-cover rounded"
+                        />
+                      ) : (
+                        <div className="w-12 h-16 bg-gray-200 flex items-center justify-center text-gray-500 rounded">
+                          <FaImage />
+                        </div>
+                      )}
+                    </td>
+                    <td className={tdClass}>{item.judul}</td>
+                    <td className={tdClass}>{item.penulis}</td>
+                    <td className={tdClass}>{item.penerbit}</td>
+                    <td className={tdClass}>{item.isbn}</td>
+                    <td className={tdClass}>{item.tahun}</td>
+                    <td className={tdClass}>{item.halaman}</td>
+                    <td className={tdClass}>{item.kategori?.name}</td>
+                    <td className={tdClass}>{item.type?.name}</td>
+                    <td className={tdClass}>
+                      {item.file ? (
+                        <a
+                          href={item.file}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 underline"
+                        >
+                          Lihat
+                        </a>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                    <td className={`${tdClass} flex gap-3`}>
+                      <button
+                        onClick={() => handleOpenEdit(item)}
+                        className="text-blue-600 hover:text-blue-800 transition"
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(item.id)}
+                        className="text-red-600 hover:text-red-800 transition"
+                      >
+                        <FaTrash />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {buku.length === 0 && loading && (
+                  <tr>
+                    <td
+                      colSpan="12"
+                      className={`${tdClass} text-center text-gray-500`}
+                    >
+                      Tidak ada data E-Buku.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
 
+          <Pagination
+            pagination={pagination}
+            onChange={({ page, limit }) => {
+              fetchDataBuku(page, limit);
+            }}
+          />
+        </ContainerMenu>
+      )}
       {/* Modal Tambah & Edit */}
       {(showTambah || showEdit) && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white shadow-lg w-full p-6 pb-20 lg:pb-6 overflow-y-auto h-screen">
+        <div className="text-xs">
+          <div className="bg-white w-full pb-20 l">
             <h2 className="text-xl font-bold mb-4 text-green-700">
               {showTambah ? "Tambah E-Buku" : "Edit E-Buku"}
             </h2>
@@ -636,12 +639,16 @@ const Ebook = () => {
                     href={formData.file_pdf}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 border hover:underline font-bold text-center text-sm mt-1 block"
+                    className="text-blue-600 border hover:underline font-bold text-center text-xs mt-2 block"
                   >
                     {formData.file_pdf}
                   </a>
                 )}
               </div>
+
+               <label className="block text-sm font-medium mb-1">
+                  Judul Buku
+                </label>
               <input
                 type="text"
                 name="judul"
@@ -651,6 +658,9 @@ const Ebook = () => {
                 className="w-full border rounded p-2"
                 required
               />
+               <label className="block text-sm font-medium mb-1">
+                  Penulis
+                </label>
               <input
                 type="text"
                 name="penulis"
@@ -659,6 +669,9 @@ const Ebook = () => {
                 placeholder="Penulis"
                 className="w-full border rounded p-2"
               />
+               <label className="block text-sm font-medium mb-1">
+                  Penerbit
+                </label>
               <input
                 type="text"
                 name="penerbit"
@@ -667,6 +680,9 @@ const Ebook = () => {
                 placeholder="Penerbit"
                 className="w-full border rounded p-2"
               />
+               <label className="block text-sm font-medium mb-1">
+                  Nomor ISBN
+                </label>
               <input
                 type="text"
                 name="isbn"
@@ -675,6 +691,9 @@ const Ebook = () => {
                 placeholder="ISBN"
                 className="w-full border rounded p-2"
               />
+               <label className="block text-sm font-medium mb-1">
+                  Tahun terbit
+                </label>
               <input
                 type="number"
                 name="tahun"
@@ -683,6 +702,9 @@ const Ebook = () => {
                 placeholder="Tahun"
                 className="w-full border rounded p-2"
               />
+               <label className="block text-sm font-medium mb-1">
+                  Jumlah halaman
+                </label>
               <input
                 type="number"
                 name="halaman"
@@ -691,6 +713,10 @@ const Ebook = () => {
                 placeholder="Jumlah Halaman"
                 className="w-full border rounded p-2"
               />
+
+               <label className="block text-sm font-medium mb-1">
+                  Kategori
+                </label>
 
               <Select
                 options={kategoriOptions}
@@ -703,6 +729,9 @@ const Ebook = () => {
                 onChange={(opt) => handleSelectChange("id_kategori", opt)}
                 placeholder="Pilih Kategori"
               />
+               <label className="block text-sm font-medium mb-1">
+                  Unit pendidikan
+                </label>
 
               <Select
                 options={lembagaOptions}
@@ -741,7 +770,7 @@ const Ebook = () => {
           </div>
         </div>
       )}
-    </ContainerMenu>
+    </>
   );
 };
 
