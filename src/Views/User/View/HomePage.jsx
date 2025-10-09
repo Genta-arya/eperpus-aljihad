@@ -57,7 +57,7 @@ const HomePage = () => {
               {/* Overlay Gelap */}
               <div className="absolute inset-0 bg-black/60"></div>
 
-              <div className="absolute top-20 md:top-10 inset-0 flex flex-col justify-center items-center text-center px-2">
+              <div className="absolute top-16 md:top-10 inset-0 flex flex-col justify-center items-center text-center px-2">
                 {/* Gambar Buku di Tengah */}
                 <img
                   src={buku}
