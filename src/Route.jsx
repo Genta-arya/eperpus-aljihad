@@ -10,9 +10,9 @@ import { Toaster } from "sonner";
 import HomePage from "./Views/User/View/HomePage";
 import Buku from "./Views/Buku/Buku";
 
-import Ebook from "./Views/Ebuku/ebuku";
 import Lembaga from "./Views/Type/Type";
 import Kategori from "./Views/Kategori/Kategori";
+import Ebook from "./Views/Ebuku/Ebuku";
 
 const RouteApp = () => {
   return (
