@@ -40,7 +40,7 @@ const PustakaSpoiler = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="px-2 md:px-24 md:mt-20 mt-10">
+    <div className="px-3 md:px-24 md:mt-20 mt-10">
       {/* Buku Fisik */}
       <div>
         <div className="flex justify-between items-center mb-4">
