@@ -15,7 +15,7 @@ export const tdClass = "py-1 px-4";
 
 export const hijau = "#018336";
 
-export const API = "http://localhost:8080/api/v1";
-// export const API = "https://server-jurnal-mengajar.vercel.app/api/v1";
-export const API_DELETE = "http://localhost:8080"
-// export const API_DELETE = "https://server-jurnal-mengajar.vercel.app";
+// export const API = "http://localhost:8080/api/v1";
+// export const API_DELETE = "http://localhost:8080"
+export const API = "https://server-eperpus.vercel.app/api/v1";
+export const API_DELETE = "https://server-eperpus.vercel.app";
