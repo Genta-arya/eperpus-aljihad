@@ -1,0 +1,637 @@
+import React, { useEffect, useState, useRef } from "react";
+import ContainerMenu from "@/components/ContainerMenu";
+import {
+  tableBase,
+  tableWrapper,
+  tbodyClass,
+  tdClass,
+  thClass,
+  theadClass,
+  trHoverClass,
+} from "@/Constant/TableSyles";
+import { FaEdit, FaTrash, FaPlus, FaImage } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
+import { uploadProfile } from "@/Services/Uploads/Uploads.services";
+import { getKategori } from "@/Services/Kategori/Kategori.services";
+import { getLembaga } from "@/Services/Lembaga/Lembaga.services";
+import { responseHandler } from "@/lib/utils";
+import Loading from "@/components/Loading";
+import Select from "react-select";
+import {
+  createBuku,
+  deleteBuku,
+  getBuku,
+  updateBuku,
+} from "@/Services/Buku/Buku.services";
+import { toast } from "sonner";
+import useDrivePicker from "react-google-drive-picker";
+
+const CLIENT_ID =
+  "1058694682055-59d9q6cap9ol8djeldpie7imbam1mgv8.apps.googleusercontent.com"; // ganti jika perlu
+const DEVELOPER_KEY = "AIzaSyCiaKLPxPuaeDgMFQ-agUSHhZajNnsldcM"; // ganti jika perlu
+const APP_ID = "1058694682055"; // Project Number (appId) — ganti jika perlu
+const DRIVE_SCOPES =
+  "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.readonly";
+
+const Ebook = () => {
+  const location = useLocation();
+  const title = "Daftar E-Buku";
+
+  const [openPicker, pickerData, authResponse] = useDrivePicker();
+  const [kategoriOptions, setKategoriOptions] = useState([]);
+  const [lembagaOptions, setLembagaOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [buku, setBuku] = useState([]);
+  const [preview, setPreview] = useState(null);
+  const [editId, setEditId] = useState(null);
+  const [showTambah, setShowTambah] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [formData, setFormData] = useState({
+    judul: "",
+    penulis: "",
+    penerbit: "",
+    isbn: "",
+    tahun: new Date().getFullYear(),
+    halaman: "",
+    id_kategori: "",
+    id_type: "",
+    cover: null,
+    file_pdf: null,
+  });
+
+  // Google token + token client ref
+  const [googleToken, setGoogleToken] = useState(null);
+  const tokenClientRef = useRef(null);
+
+  // Load Google Identity Services (GIS) script once
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // load GIS script if not already loaded
+    if (!document.getElementById("gis-client-script")) {
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.id = "gis-client-script";
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+
+      script.onload = () => {
+        // init token client reference (we won't request token immediately)
+        tokenClientRef.current = window.google.accounts.oauth2.initTokenClient({
+          client_id: CLIENT_ID,
+          scope: DRIVE_SCOPES,
+          callback: (tokenResponse) => {
+            // tokenResponse may be null if user cancels; guard it
+            if (tokenResponse && tokenResponse.access_token) {
+              setGoogleToken(tokenResponse.access_token);
+              toast.success("Berhasil login Google Drive");
+            }
+          },
+        });
+      };
+    } else {
+      // script already present: ensure tokenClientRef created
+      if (window.google && !tokenClientRef.current) {
+        tokenClientRef.current = window.google.accounts.oauth2.initTokenClient({
+          client_id: CLIENT_ID,
+          scope: DRIVE_SCOPES,
+          callback: (tokenResponse) => {
+            if (tokenResponse && tokenResponse.access_token) {
+              setGoogleToken(tokenResponse.access_token);
+              toast.success("Berhasil login Google Drive");
+            }
+          },
+        });
+      }
+    }
+  }, []);
+
+  const fetchMetaData = async () => {
+    setLoading(true);
+    try {
+      const [kategoriRes, lembagaRes] = await Promise.all([
+        getKategori(),
+        getLembaga(),
+      ]);
+
+      setKategoriOptions(
+        kategoriRes.data.map((k) => ({
+          value: k.id,
+          label: k.name || k.nama || k.title,
+        }))
+      );
+
+      setLembagaOptions(
+        lembagaRes.data.map((l) => ({
+          value: l.id,
+          label: l.name || l.nama_lembaga || l.nama,
+        }))
+      );
+    } catch (error) {
+      responseHandler(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchDataBuku = async () => {
+    try {
+      const response = await getBuku("ebuku");
+      setBuku(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const loadAll = async () => {
+      setLoading(true);
+      try {
+        await Promise.all([fetchMetaData(), fetchDataBuku()]);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadAll();
+  }, []);
+
+  const handleOpenTambah = () => {
+    setFormData({
+      judul: "",
+      penulis: "",
+      penerbit: "",
+      isbn: "",
+      tahun: new Date().getFullYear(),
+      halaman: "",
+      id_kategori: "",
+      id_type: "",
+      cover: null,
+      file_pdf: null,
+    });
+    setPreview(null);
+    setShowTambah(true);
+  };
+
+  const handleOpenEdit = (item) => {
+    setEditId(item.id);
+    setFormData({
+      id: item.id,
+      judul: item.judul || "",
+      penulis: item.penulis || "",
+      penerbit: item.penerbit || "",
+      isbn: item.isbn || "",
+      tahun: item.tahun || new Date().getFullYear(),
+      halaman: item.halaman || "",
+      id_kategori: item.kategoriId || item.kategori?.id || "",
+      id_type: item.typeId || item.type?.id || "",
+      cover: item.cover || null,
+      file_pdf: item.file || null,
+    });
+    setPreview(item.cover || null);
+    setShowEdit(true);
+  };
+
+  const handleFileChange = (e, field) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData((prev) => ({ ...prev, [field]: file }));
+      if (field === "cover") {
+        setPreview(URL.createObjectURL(file));
+      }
+    }
+  };
+
+  const uploadFile = async (file) => {
+    const uploadForm = new FormData();
+    uploadForm.append("file", file);
+    const res = await uploadProfile(uploadForm);
+    return res.data.file_url;
+  };
+
+  // === Google Drive Picker: open with token; request token if not present
+  const handleOpenDrivePicker = () => {
+    const openPickerWithToken = (token) => {
+      openPicker({
+        clientId: CLIENT_ID,
+        developerKey: DEVELOPER_KEY,
+        appId: APP_ID,
+        oauthToken: token,
+        token: token,
+        viewId: "PDFS", // fokus ke PDF, bisa diganti DOCS
+        showUploadView: true,
+        showUploadFolders: true,
+        supportDrives: true,
+        multiselect: false,
+        callbackFunction: (data) => {
+          if (data.action === "picked") {
+            const file = data.docs[0];
+            setFormData((prev) => ({
+              ...prev,
+              file_pdf: `https://drive.google.com/uc?id=${file.id}`,
+            }));
+            toast.success("File PDF berhasil dipilih dari Google Drive!");
+          } else if (data.action === "cancel") {
+            toast.message && toast.message("Picker dibatalkan");
+          }
+        },
+      });
+    };
+
+    // if we already have googleToken, open directly
+    if (googleToken) {
+      openPickerWithToken(googleToken);
+      return;
+    }
+
+    // else, request token via tokenClientRef
+    if (tokenClientRef.current) {
+      // requestAccessToken akan men-trigger callback yang kita daftarkan di init
+      tokenClientRef.current.requestAccessToken({ prompt: "consent" });
+      // but we need the token value immediately after it's set in state.
+      // so set a small watcher: when googleToken becomes available, open picker.
+      // to avoid multiple listeners, use a short-lived interval
+      const waitForToken = setInterval(() => {
+        if (googleToken) {
+          clearInterval(waitForToken);
+          openPickerWithToken(googleToken);
+        }
+      }, 300);
+
+      // timeout fallback
+      setTimeout(() => clearInterval(waitForToken), 15000);
+    } else {
+      toast.error(
+        "Google Identity client belum siap, coba ulang beberapa detik."
+      );
+    }
+  };
+
+  const handleTambahSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      let coverUrl = null;
+      let pdfUrl = formData.file_pdf;
+
+      if (formData.cover) coverUrl = await uploadFile(formData.cover);
+      if (formData.file_pdf instanceof File)
+        pdfUrl = await uploadFile(formData.file_pdf);
+
+      const payload = {
+        cover: coverUrl,
+        file: pdfUrl,
+        judul: formData.judul,
+        penulis: formData.penulis,
+        penerbit: formData.penerbit,
+        isbn: formData.isbn,
+        tahun: parseInt(formData.tahun),
+        halaman: parseInt(formData.halaman),
+        id_kategori: formData.id_kategori,
+        id_type: formData.id_type,
+        jenis: "ebuku",
+      };
+
+      await createBuku(payload);
+      toast.success("E-Buku berhasil ditambahkan");
+      setShowTambah(false);
+      fetchDataBuku();
+    } catch (error) {
+      responseHandler(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      let coverUrl = formData.cover;
+      let pdfUrl = formData.file_pdf;
+
+      if (formData.cover instanceof File)
+        coverUrl = await uploadFile(formData.cover);
+      if (formData.file_pdf instanceof File)
+        pdfUrl = await uploadFile(formData.file_pdf);
+
+      const payload = {
+        id: editId,
+        cover: coverUrl,
+        file: pdfUrl,
+        judul: formData.judul,
+        penulis: formData.penulis,
+        penerbit: formData.penerbit,
+        isbn: formData.isbn,
+        tahun: parseInt(formData.tahun),
+        halaman: parseInt(formData.halaman),
+        id_kategori: formData.id_kategori,
+        id_type: formData.id_type,
+        jenis: "ebuku",
+      };
+
+      await updateBuku(payload);
+      toast.success("E-Buku berhasil diperbarui");
+      setShowEdit(false);
+      fetchDataBuku();
+    } catch (error) {
+      responseHandler(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Yakin ingin menghapus E-Buku ini?")) {
+      try {
+        setLoading(true);
+        await deleteBuku({ id, jenis: "ebuku" });
+        toast.success("E-Buku berhasil dihapus");
+        fetchDataBuku();
+      } catch (error) {
+        responseHandler(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleSelectChange = (name, option) => {
+    setFormData((prev) => ({ ...prev, [name]: option ? option.value : "" }));
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  if (loading) return <Loading />;
+
+  return (
+    <ContainerMenu text={title}>
+      <div className="flex items-center justify-between mb-4">
+        <button
+          onClick={handleOpenTambah}
+          className="flex items-center gap-2 bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-800 transition-all"
+        >
+          <FaPlus /> Tambah E-Buku
+        </button>
+      </div>
+
+      {/* Table */}
+      <div className={tableWrapper}>
+        <table className={tableBase}>
+          <thead className={theadClass}>
+            <tr>
+              <th className={thClass}>#</th>
+              <th className={thClass}>Cover</th>
+              <th className={thClass}>Judul</th>
+              <th className={thClass}>Penulis</th>
+              <th className={thClass}>Penerbit</th>
+              <th className={thClass}>ISBN</th>
+              <th className={thClass}>Tahun</th>
+              <th className={thClass}>Halaman</th>
+              <th className={thClass}>Kategori</th>
+              <th className={thClass}>Unit Pendidikan</th>
+              <th className={thClass}>File PDF</th>
+              <th className={thClass}>Aksi</th>
+            </tr>
+          </thead>
+          <tbody className={tbodyClass}>
+            {buku.map((item, index) => (
+              <tr key={item.id} className={trHoverClass}>
+                <td className={tdClass}>{index + 1}</td>
+                <td className={tdClass}>
+                  {item.cover ? (
+                    <img
+                      src={item.cover}
+                      alt={item.judul}
+                      className="w-12 h-16 object-cover rounded"
+                    />
+                  ) : (
+                    <div className="w-12 h-16 bg-gray-200 flex items-center justify-center text-gray-500 rounded">
+                      <FaImage />
+                    </div>
+                  )}
+                </td>
+                <td className={tdClass}>{item.judul}</td>
+                <td className={tdClass}>{item.penulis}</td>
+                <td className={tdClass}>{item.penerbit}</td>
+                <td className={tdClass}>{item.isbn}</td>
+                <td className={tdClass}>{item.tahun}</td>
+                <td className={tdClass}>{item.halaman}</td>
+                <td className={tdClass}>{item.kategori?.name}</td>
+                <td className={tdClass}>{item.type?.name}</td>
+                <td className={tdClass}>
+                  {item.file ? (
+                    <a
+                      href={item.file}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline"
+                    >
+                      Lihat
+                    </a>
+                  ) : (
+                    "-"
+                  )}
+                </td>
+                <td className={`${tdClass} flex gap-3`}>
+                  <button
+                    onClick={() => handleOpenEdit(item)}
+                    className="text-blue-600 hover:text-blue-800 transition"
+                  >
+                    <FaEdit />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(item.id)}
+                    className="text-red-600 hover:text-red-800 transition"
+                  >
+                    <FaTrash />
+                  </button>
+                </td>
+              </tr>
+            ))}
+            {buku.length === 0 && (
+              <tr>
+                <td
+                  colSpan="12"
+                  className={`${tdClass} text-center text-gray-500`}
+                >
+                  Tidak ada data E-Buku.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Modal Tambah & Edit */}
+      {(showTambah || showEdit) && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white shadow-lg w-full p-6 pb-20 lg:pb-6 overflow-y-auto h-screen">
+            <h2 className="text-xl font-bold mb-4 text-green-700">
+              {showTambah ? "Tambah E-Buku" : "Edit E-Buku"}
+            </h2>
+            <form
+              onSubmit={showTambah ? handleTambahSubmit : handleEditSubmit}
+              className="space-y-3"
+            >
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Cover Buku
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileChange(e, "cover")}
+                />
+                {preview && (
+                  <div className="flex justify-center">
+                    <img
+                      src={preview}
+                      alt="Preview"
+                      className="mt-2 w-24 h-32 object-cover rounded"
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  File PDF
+                </label>
+
+                <div className="flex items-center gap-3">
+                  {/* <input type="file" accept="application/pdf" onChange={(e) => handleFileChange(e, "file_pdf")} /> */}
+                  <button
+                    type="button"
+                    onClick={handleOpenDrivePicker}
+                    className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  >
+                    Drive
+                  </button>
+                </div>
+
+                {formData.file_pdf && !(formData.file_pdf instanceof File) && (
+                  <a
+                    href={formData.file_pdf}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline text-sm mt-2 block"
+                  >
+                    {formData.file_pdf}
+                  </a>
+                )}
+              </div>
+
+              <input
+                type="text"
+                name="judul"
+                value={formData.judul}
+                onChange={handleChange}
+                placeholder="Judul Buku"
+                className="w-full border rounded p-2"
+                required
+              />
+
+              <input
+                type="text"
+                name="penulis"
+                value={formData.penulis}
+                onChange={handleChange}
+                placeholder="Penulis"
+                className="w-full border rounded p-2"
+              />
+
+              <input
+                type="text"
+                name="penerbit"
+                value={formData.penerbit}
+                onChange={handleChange}
+                placeholder="Penerbit"
+                className="w-full border rounded p-2"
+              />
+
+              <input
+                type="text"
+                name="isbn"
+                value={formData.isbn}
+                onChange={handleChange}
+                placeholder="ISBN"
+                className="w-full border rounded p-2"
+              />
+
+              <input
+                type="number"
+                name="tahun"
+                value={formData.tahun}
+                onChange={handleChange}
+                placeholder="Tahun"
+                className="w-full border rounded p-2"
+              />
+
+              <input
+                type="number"
+                name="halaman"
+                value={formData.halaman}
+                onChange={handleChange}
+                placeholder="Jumlah Halaman"
+                className="w-full border rounded p-2"
+              />
+
+              <Select
+                options={kategoriOptions}
+                value={
+                  kategoriOptions.find(
+                    (opt) => opt.value === formData.id_kategori
+                  ) || null
+                }
+                isClearable
+                onChange={(opt) => handleSelectChange("id_kategori", opt)}
+                placeholder="Pilih Kategori"
+              />
+
+              <Select
+                options={lembagaOptions}
+                value={
+                  lembagaOptions.find(
+                    (opt) => opt.value === formData.id_type
+                  ) || null
+                }
+                isClearable
+                onChange={(opt) => handleSelectChange("id_type", opt)}
+                placeholder="Pilih Unit Pendidikan"
+              />
+
+              <div className="flex flex-col-reverse gap-3 mt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowTambah(false);
+                    setShowEdit(false);
+                  }}
+                  className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                >
+                  Simpan
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </ContainerMenu>
+  );
+};
+
+export default Ebook;
