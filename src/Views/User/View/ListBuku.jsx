@@ -77,8 +77,11 @@ const ListBuku = () => {
         res?.data?.pagination || { page, limit, totalPages: 1, total: 0 }
       );
     } catch (err) {
-      console.error(err);
-      setError("gagal");
+      if (err?.response?.status === 404) {
+        setError("404");
+      } else {
+        setError("gagal");
+      }
     } finally {
       setLoading(false);
     }
