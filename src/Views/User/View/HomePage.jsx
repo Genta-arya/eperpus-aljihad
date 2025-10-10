@@ -42,7 +42,7 @@ const HomePage = () => {
   return (
     <>
       {/* Slider Fixed */}
-      <div className=" top-0 left-0 w-full h-[400px] z-0 overflow-hidden">
+      <div className=" top-0 left-0 w-full h-[400px] z-0 overflow-hidden hide-scrollbar-x ">
         <Slider {...settings}>
           {sliders.map((image, index) => (
             <div
@@ -107,7 +107,7 @@ const HomePage = () => {
       </div>
 
       {/* Konten halaman di bawah slider */}
-      <div className="relative z-0  md:pt-[0px]">
+      <div className="relative z-0  md:pt-[0px] ">
         <Container>
           <MenuHomePage />
 

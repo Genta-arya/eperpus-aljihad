@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { FaBook, FaTabletAlt, FaSearch, FaTimes } from "react-icons/fa";
+import bukufisik from "../../../assets/bukufisik.png";
+import bukudigital from "../../../assets/bukudigital.png";
+import PustakaKategori from "../View/PustakaKategori";
 
 const MenuHomePage = () => {
   const [searchText, setSearchText] = useState("");
@@ -11,8 +14,10 @@ const MenuHomePage = () => {
   return (
     <div className="lg:max-w-[85%] md:max-w-[90%] w-full md:-mt-5 -mt-44 z-10 mx-auto ">
       {/* Card */}
-      <div className="bg-white shadow-lg lg:p-10 p-6 border border-gray-100">
+      <div className="bg-white shadow-lg lg:p-10 py-4 px-2 border border-gray-100">
         {/* Search Bar */}
+
+        <PustakaKategori />
         <div className="flex items-center gap-2 mb-6">
           <div className="relative flex-1">
             <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -39,15 +44,26 @@ const MenuHomePage = () => {
         </div>
 
         {/* Tombol Buku dan E-Buku */}
-        <div className="grid grid-cols-2 gap-4">
-          <button className="flex flex-col border-yellow-400 border-4 items-center justify-center bg-green-700 text-white py-4 rounded-xl font-semibold shadow hover:bg-green-800 transition-all">
-            <FaBook className="text-6xl mb-3" />
-            Buku
+        <div className="grid grid-cols-2 gap-2 uppercase">
+          <button className="flex flex-col hover:border-yellow-400 border-4 border-gray-100 items-center justify-center text-black py-4 rounded-xl font-semibold shadow hover:bg-gray-200 transition-all">
+            <div>
+              <img
+                src={bukufisik}
+                alt="Pustaka Fisik"
+                className="md:w-72  w-40 h-40 md:h-52"
+              />
+              <p className="uppercase font-bold">Pustaka Fisik</p>
+            </div>
           </button>
-
-          <button className="flex flex-col items-center border-yellow-400 border-4 justify-center bg-green-700 text-white py-4 rounded-xl font-semibold shadow hover:bg-green-800 transition-all">
-            <FaTabletAlt className="text-6xl mb-3" />
-            E-Buku
+          <button className="flex flex-col hover:border-yellow-400 border-4 border-gray-100 items-center justify-center text-black py-4 rounded-xl font-semibold shadow hover:bg-gray-200 transition-all">
+            <div className="flex flex-col items-center">
+              <img
+                src={bukudigital}
+                alt="Pustaka Fisik"
+                className="md:w-72 w-40 h-40 md:h-52"
+              />
+              <p className="uppercase font-bold">Pustaka digital</p>
+            </div>
           </button>
         </div>
       </div>

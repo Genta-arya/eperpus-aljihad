@@ -1,20 +1,18 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 .peer {
-  width: 5rem; 
+  width: 5rem;
   transition: width 0.3s ease-in-out;
 }
 
 .peer:hover {
-  width: 15rem; 
+  width: 15rem;
 }
 
-
 .group-hover\:inline {
-  display: inline-block !important; 
+  display: inline-block !important;
 }
 
 .group-hover\:hidden {
@@ -30,7 +28,6 @@ a[href*="froala.com"][target="_blank"] {
 a.fr-floating-btn {
   display: none !important;
 }
-
 
 @layer base {
   :root {
@@ -104,7 +101,23 @@ a.fr-floating-btn {
   }
 }
 
-
+/* Scrollbar global (webkit-based browser) */
+::-webkit-scrollbar {
+  @apply w-1 h-1; /* width/height scrollbar */
+}
+::-webkit-scrollbar-track {
+  @apply bg-gray-200 rounded-full;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 rounded-full hover:bg-gray-500;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #077c29 #e5e7eb;
+}
 
 @layer base {
   * {

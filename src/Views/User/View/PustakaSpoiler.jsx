@@ -1,5 +1,6 @@
 import { getBuku } from "@/Services/Buku/Buku.services";
 import React, { useState, useEffect } from "react";
+import { FaImage, FaRedo } from "react-icons/fa";
 
 const PustakaSpoiler = () => {
   const [bukus, setBukus] = useState([]);
@@ -7,6 +8,7 @@ const PustakaSpoiler = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [imgError, setImgError] = useState(false);
   const fetchBuku = async () => {
     try {
       setLoading(true);
@@ -37,7 +39,29 @@ const PustakaSpoiler = () => {
     </div>
   );
 
-  if (error) return <p>{error}</p>;
+  const ImagePlaceholder = () => (
+    <div className="w-full h-64 flex flex-col items-center justify-center bg-gray-100 rounded-md shadow-lg border border-gray-300">
+      <FaImage className="text-gray-400 text-6xl mb-2" />
+      <span className="text-gray-500 font-medium">Gagal memuat gambar</span>
+    </div>
+  );
+
+  if (error)
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <FaImage className="text-gray-400 text-8xl mb-4" />
+        <p className="text-gray-500 text-lg mb-4">{error}</p>
+        <button
+          onClick={() => {
+            fetchBuku(), setImgError(false), setError(null);
+          }}
+          className="flex items-center px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition"
+        >
+          <FaRedo className="mr-2" />
+          Coba lagi
+        </button>
+      </div>
+    );
 
   return (
     <div className="px-3 md:px-24 md:mt-20 mt-10">
@@ -58,11 +82,15 @@ const PustakaSpoiler = () => {
           ) : bukus.length > 0 ? (
             bukus.map((buku) => (
               <div key={buku.id} className="flex flex-col w-full">
-                <img
-                  src={buku.cover}
-                  alt={buku.judul}
-                  className="w-full mb-4 rounded-md shadow-2xl drop-shadow-lg hover:scale-95 duration-300 shadow-black"
-                />
+                {imgError && <ImagePlaceholder />}
+                {!imgError && (
+                  <img
+                    src={buku.cover}
+                    onError={() => setImgError(true)}
+                    alt={buku.judul}
+                    className="w-full mb-4 rounded-md shadow-xl drop-shadow-lg hover:scale-95 duration-300 shadow-black"
+                  />
+                )}
                 <div className="p-2 flex flex-col flex-1">
                   <p className="text-xs text-center mb-2 uppercase md:text-sm text-gray-500 truncate">
                     {buku.penulis.length > 30
@@ -70,8 +98,8 @@ const PustakaSpoiler = () => {
                       : buku.penulis}
                   </p>
                   <h3 className="font-semibold text-center text-sm md:text-lg truncate">
-                    {buku.judul.length > 30
-                      ? buku.judul.slice(0, 30) + "..."
+                    {buku.judul.length > 40
+                      ? buku.judul.slice(0, 40) + "..."
                       : buku.judul}
                   </h3>
                 </div>
@@ -104,11 +132,16 @@ const PustakaSpoiler = () => {
                 className="flex flex-col w-full cursor-pointer"
                 onClick={() => window.open(ebuku.file, "_blank")}
               >
-                <img
-                  src={ebuku.cover}
-                  alt={ebuku.judul}
-                  className="w-full mb-4 rounded-md shadow-2xl drop-shadow-lg hover:scale-95 duration-300 shadow-black"
-                />
+                {imgError && <ImagePlaceholder />}
+                {!imgError && (
+                  <img
+                    src={ebuku.cover}
+                    onError={() => setImgError(true)}
+                    alt={ebuku.judul}
+                    className="w-full mb-4 rounded-md shadow-xl drop-shadow-lg hover:scale-95 duration-300 shadow-black"
+                  />
+                )}
+
                 <div className="p-2 flex flex-col flex-1">
                   <p className="text-xs text-center mb-2 uppercase md:text-sm text-gray-500 truncate">
                     {ebuku.penulis.length > 30
@@ -116,8 +149,8 @@ const PustakaSpoiler = () => {
                       : ebuku.penulis}
                   </p>
                   <h3 className="font-semibold text-center text-sm md:text-lg truncate">
-                    {ebuku.judul.length > 30
-                      ? ebuku.judul.slice(0, 30) + "..."
+                    {ebuku.judul.length > 40
+                      ? ebuku.judul.slice(0, 40) + "..."
                       : ebuku.judul}
                   </h3>
                 </div>
