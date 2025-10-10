@@ -4,10 +4,7 @@ const GridBuku = ({ data }) => {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 md:gap-6 gap-2">
       {data.map((item) => (
-        <div
-          key={item.id}
-          className=""
-        >
+        <div key={item.id} className="">
           <div className="">
             <img
               src={
@@ -28,11 +25,6 @@ const GridBuku = ({ data }) => {
           </div>
 
           {/* Efek overlay saat hover */}
-          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-            <button className="bg-white text-sm px-3 py-1.5 rounded-lg font-medium shadow hover:bg-gray-100">
-              Lihat Detail
-            </button>
-          </div>
         </div>
       ))}
     </div>

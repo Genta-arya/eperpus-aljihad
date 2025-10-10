@@ -67,7 +67,7 @@ const MenuHomePage = () => {
         {/* 🔸 Tombol Buku & E-Buku */}
         <div className="grid grid-cols-2 gap-2 uppercase">
           <button
-            onClick={() => navigate("/katalog/buku")}
+            onClick={() => (window.location.href = "/katalog/buku")}
             className="flex flex-col hover:border-yellow-400 border-4 border-gray-100 items-center justify-center text-black py-4 rounded-xl font-semibold shadow hover:bg-gray-200 transition-all"
           >
             <div>
@@ -81,7 +81,7 @@ const MenuHomePage = () => {
           </button>
 
           <button
-            onClick={() => navigate("/katalog/ebuku")}
+            onClick={() => (window.location.href = "/katalog/ebuku")}
             className="flex flex-col hover:border-yellow-400 border-4 border-gray-100 items-center justify-center text-black py-4 rounded-xl font-semibold shadow hover:bg-gray-200 transition-all"
           >
             <div className="flex flex-col items-center">

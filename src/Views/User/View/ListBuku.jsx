@@ -149,6 +149,14 @@ const ListBuku = () => {
   // 🔹 Pagination
   const handlePageChange = ({ page, limit }) => {
     setPagination((prev) => ({ ...prev, page, limit }));
+
+    if (submittedKeyword.trim()) {
+      // kalau ada search keyword, pakai handleSearch
+      handleSearch(page, limit, submittedKeyword);
+    } else {
+      // kalau tidak, fetch data normal
+      fetchBuku(page, limit);
+    }
   };
 
   // 🔹 Fetch kategori & unit pendidikan awal

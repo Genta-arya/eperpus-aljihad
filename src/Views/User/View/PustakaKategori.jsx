@@ -46,7 +46,9 @@ const PustakaKategori = () => {
 
   // 🔹 Handle klik kategori → buka halaman katalog buku dengan params
   const handleClick = (kategoriName) => {
-    navigate(`/katalog/buku?kategori=${encodeURIComponent(kategoriName)}`);
+    window.location.href = `/katalog/buku?kategori=${encodeURIComponent(
+      kategoriName
+    )}`;
   };
 
   return (
