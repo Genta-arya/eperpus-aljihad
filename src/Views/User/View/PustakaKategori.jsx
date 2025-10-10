@@ -1,10 +1,12 @@
 import { getKategori } from "@/Services/Kategori/Kategori.services";
 import React, { useEffect, useState } from "react";
 import { FaBook } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const PustakaKategori = () => {
   const [kategoriList, setKategoriList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const getRandomColor = () => {
     const colors = [
@@ -42,33 +44,36 @@ const PustakaKategori = () => {
     </div>
   );
 
+  // 🔹 Handle klik kategori → buka halaman katalog buku dengan params
+  const handleClick = (kategoriName) => {
+    navigate(`/katalog/buku?kategori=${encodeURIComponent(kategoriName)}`);
+  };
+
   return (
-    <>
-      {/* <p className="font-extrabold text-xl uppercase mb-4 px-2">Pustaka Kategori</p> */}
-      <div className="overflow-x-auto py-4 px-2 mb-8">
-        <div className="flex space-x-4">
-          {loading
-            ? Array(6)
-                .fill(0)
-                .map((_, i) => <SkeletonItem key={i} />)
-            : kategoriList.map((kategori) => (
+    <div className="overflow-x-auto py-4 px-2 mb-8">
+      <div className="flex space-x-4">
+        {loading
+          ? Array(12)
+              .fill(0)
+              .map((_, i) => <SkeletonItem key={i} />)
+          : kategoriList.map((kategori) => (
+              <div
+                className="flex flex-col items-center w-20 cursor-pointer"
+                key={kategori.id}
+                onClick={() => handleClick(kategori.name)}
+              >
                 <div
-                  className="flex flex-col items-center w-20"
-                  key={kategori.id}
+                  className={`w-16 h-16 flex items-center border-2 border-gray-500 justify-center rounded-full ${getRandomColor()} text-white shadow-lg hover:scale-105 transition`}
                 >
-                  <div
-                    className={`w-16 h-16 flex items-center border-2 border-gray-500 justify-center rounded-full ${getRandomColor()} text-white shadow-lg cursor-pointer hover:scale-105 transition`}
-                  >
-                    <FaBook className="text-2xl" />
-                  </div>
-                  <div className="text-xs text-center mt-1 px-1 line-clamp-3">
-                    {kategori.name}
-                  </div>
+                  <FaBook className="text-2xl" />
                 </div>
-              ))}
-        </div>
+                <div className="text-xs text-center mt-1 px-1 line-clamp-3">
+                  {kategori.name}
+                </div>
+              </div>
+            ))}
       </div>
-    </>
+    </div>
   );
 };
 

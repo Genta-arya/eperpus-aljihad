@@ -55,6 +55,21 @@ export const searchBook = async ({ keyword, type, page = 1, limit = 10 }) => {
     throw error;
   }
 };
+export const searchBooks = async ({ keyword, type, page = 1, limit = 10 }) => {
+  try {
+    // endpoint sesuai backend: POST /book/search/:keyword
+    const response = await axiosInstance.post(
+      `/data/books/search/${keyword}`,
+      { type },
+      {
+        params: { page, limit },
+      }
+    );
+    return response.data; // data: { buku, pagination }
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const countMasterData = async () => {
   try {

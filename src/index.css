@@ -127,3 +127,14 @@ a.fr-floating-btn {
     @apply bg-background text-foreground;
   }
 }
+
+/* 🔸 Hilangkan scrollbar hanya di mobile */
+@media (max-width: 768px) {
+  .scrollbar-hide-mobile::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide-mobile {
+    -ms-overflow-style: none; /* IE dan Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}

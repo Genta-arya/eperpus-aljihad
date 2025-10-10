@@ -13,6 +13,7 @@ import Buku from "./Views/Buku/Buku";
 import Lembaga from "./Views/Type/Type";
 import Kategori from "./Views/Kategori/Kategori";
 import Ebook from "./Views/Ebuku/Ebuku";
+import ListBuku from "./Views/User/View/ListBuku";
 
 const RouteApp = () => {
   return (
@@ -28,6 +29,7 @@ const RouteApp = () => {
           <Route path="/unit-pendidikan" element={<Lembaga />} />
         </Route>
         <Route path="/" element={<HomePage />} />
+        <Route path="/katalog/:type" element={<ListBuku />} />
         <Route path="*" element={<HalamanNotFound />} />
       </Routes>
       <Toaster
