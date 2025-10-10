@@ -6,9 +6,9 @@ const GridBuku = ({ data }) => {
       {data.map((item) => (
         <div
           key={item.id}
-          className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition relative"
+          className=""
         >
-          <div className="relative md:h-80 w-40 md:w-full overflow-hidden">
+          <div className="">
             <img
               src={
                 item.cover ||
