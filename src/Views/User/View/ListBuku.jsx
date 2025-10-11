@@ -14,7 +14,6 @@ import Notfound from "./Notfound";
 const ListBuku = () => {
   const location = useLocation();
   const path = location.pathname;
-  const params = new URLSearchParams(location.search);
 
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -217,7 +216,7 @@ const ListBuku = () => {
           </>
         ) : (
           <>
-            <GridBuku data={data} />
+            <GridBuku data={data} path={path} />
             <Pagination pagination={pagination} onChange={handlePageChange} />
           </>
         )}

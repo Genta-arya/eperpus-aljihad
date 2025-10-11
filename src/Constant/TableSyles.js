@@ -15,7 +15,17 @@ export const tdClass = "py-1 px-4";
 
 export const hijau = "#018336";
 
+export const slugify = (text) => {
+  if (!text) return "";
+  return text
+    .replace(/<[^>]+>/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-zA-Z0-9-]/g, "")
+    .toLowerCase();
+};
+
 // export const API = "http://localhost:8080/api/v1";
-// export const API_DELETE = "http://localhost:8080"
+// export const API_DELETE = "http://localhost:8080";
 export const API = "https://server-eperpus.vercel.app/api/v1";
 export const API_DELETE = "https://server-eperpus.vercel.app";

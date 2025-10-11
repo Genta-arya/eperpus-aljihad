@@ -1,6 +1,8 @@
+import { slugify } from "@/Constant/TableSyles";
 import { getBuku } from "@/Services/Buku/Buku.services";
 import React, { useState, useEffect } from "react";
-import { FaImage, FaRedo } from "react-icons/fa";
+import { FaBook, FaBookOpen, FaImage, FaRedo } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const PustakaSpoiler = () => {
   const [bukus, setBukus] = useState([]);
@@ -68,10 +70,19 @@ const PustakaSpoiler = () => {
       {/* Buku Fisik */}
       <div>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">PUSTAKA TERBARU</h2>
-          <p className="cursor-pointer font-semibold hover:underline">
+          <h2 className="md:text-xl text-base font-bold">
+            {" "}
+            <div className="flex items-center gap-2">
+              <FaBookOpen />
+              <p>PUSTAKA TERBARU</p>
+            </div>
+          </h2>
+          <Link
+            to="/katalog/buku"
+            className="cursor-pointer text-sm font-semibold hover:underline"
+          >
             Lihat semua
-          </p>
+          </Link>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
@@ -81,7 +92,11 @@ const PustakaSpoiler = () => {
               .map((_, i) => <SkeletonCard key={i} />)
           ) : bukus.length > 0 ? (
             bukus.map((buku) => (
-              <div key={buku.id} className="flex flex-col w-full">
+              <Link
+                to={`/detail/buku/${buku.id}/${slugify(buku.judul)}`}
+                key={buku.id}
+                className="flex flex-col w-full"
+              >
                 {imgError && <ImagePlaceholder />}
                 {!imgError && (
                   <img
@@ -103,7 +118,7 @@ const PustakaSpoiler = () => {
                       : buku.judul}
                   </h3>
                 </div>
-              </div>
+              </Link>
             ))
           ) : (
             <p>Tidak ada buku fisik</p>
@@ -114,10 +129,19 @@ const PustakaSpoiler = () => {
       {/* E-Buku */}
       <div className="mt-16">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">PUSTAKA DIGITAL</h2>
-          <p className="cursor-pointer font-semibold hover:underline">
+          <h2 className="md:text-xl text-base font-bold">
+            {" "}
+            <div className="flex items-center gap-2">
+              <FaBookOpen />
+              <p>PUSTAKA DIGITAL</p>
+            </div>
+          </h2>
+          <Link
+            to="/katalog/ebuku"
+            className="cursor-pointer text-sm font-semibold hover:underline"
+          >
             Lihat semua
-          </p>
+          </Link>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

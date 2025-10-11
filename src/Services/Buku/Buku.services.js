@@ -79,3 +79,12 @@ export const countMasterData = async () => {
     throw error;
   }
 };
+
+export const getSingleBuku = async (data) => {
+  try {
+    const response = await axiosInstance.get(`/data/book/detail/${data}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

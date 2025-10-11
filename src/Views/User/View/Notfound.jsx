@@ -14,31 +14,29 @@ const Notfound = ({ errormessage }) => {
   const is404 = errormessage === "404";
   const imageSrc = is404 ? notfoundImg : networkErrorImg;
 
-  const message = is404
-    ? (
-        <>
-          Yahh, buku{" "}
-          <span className="underline text-red-500 font-semibold">
-            {keyword}
-          </span>{" "}
-          yang kamu cari tidak ditemukan 😢
-        </>
-      )
-    : (
-        <>
-          Terjadi kesalahan jaringan 😔
-          <br />
-          Silakan periksa koneksi internet kamu dan coba lagi.
-        </>
-      );
-
+  const message = is404 ? (
+    <>
+      Yahh, buku{" "}
+      <span className="underline text-red-500 font-semibold">{keyword}</span>{" "}
+      yang kamu cari tidak ditemukan 😢
+    </>
+  ) : (
+    <>
+      Terjadi kesalahan jaringan 😔
+      <br />
+      Silakan periksa koneksi internet kamu dan coba lagi.
+    </>
+  );
+  if (errormessage === "no") return null;
   return (
     <div className="flex flex-col gap-4 items-center justify-center w-full h-[65vh] text-center px-4">
       <img
         src={imageSrc}
         alt={is404 ? "Buku tidak ditemukan" : "Kesalahan jaringan"}
         className={`${
-          is404 ? "max-w-xs sm:max-w-sm rounded-full bg-black" : "max-w-md sm:max-w-lg rounded-xl"
+          is404
+            ? "max-w-xs sm:max-w-sm rounded-full bg-black"
+            : "max-w-md sm:max-w-lg rounded-xl"
         } object-contain  opacity-95`}
       />
 

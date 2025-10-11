@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const MenuHomePage = () => {
   const [searchText, setSearchText] = useState("");
+  const [searchType, setSearchType] = useState("buku"); // 🔹 default: buku
   const navigate = useNavigate();
 
   // 🔹 Hapus input
@@ -16,10 +17,10 @@ const MenuHomePage = () => {
 
   // 🔹 Jalankan pencarian (klik tombol / tekan enter)
   const handleSearch = (e) => {
-    e.preventDefault(); // biar form ga reload
+    e.preventDefault();
     if (searchText.trim() !== "") {
-      //  navigasikan
-      window.location.href = `/katalog/buku?q=${encodeURIComponent(
+      // arahkan ke halaman sesuai jenis buku
+      window.location.href = `/katalog/${searchType}?q=${encodeURIComponent(
         searchText
       )}`;
     }
@@ -27,23 +28,35 @@ const MenuHomePage = () => {
 
   return (
     <div className="lg:max-w-[85%] md:max-w-[90%] w-full md:-mt-5 -mt-44 z-10 mx-auto">
-      <div className="bg-white shadow-lg lg:p-10 py-4 px-2 border border-gray-100">
+      <div className="bg-white shadow-lg lg:p-10 py-4 px-2 border border-gray-100 rounded-xl">
         {/* 🔸 Kategori */}
         <PustakaKategori />
 
         {/* 🔸 Search Bar */}
-        <form onSubmit={handleSearch} className="flex items-center gap-2 mb-6">
-          <div className="relative flex-1">
+        <form
+          onSubmit={handleSearch}
+          className="flex overflow-auto md:flex-row items-center gap-2 mb-6"
+        >
+          {/* 🔹 Select Jenis Buku */}
+          <select
+            value={searchType}
+            onChange={(e) => setSearchType(e.target.value)}
+            className="border w-fit border-gray-300 rounded-lg px-3 py-2 text-gray-700 bg-white cursor-pointer focus:ring-2 transition-all"
+          >
+            <option value="buku">Buku</option>
+            <option value="ebuku">E-Buku</option>
+          </select>
+
+          {/* 🔹 Input Search */}
+          <div className="relative flex-1 w-full">
             <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              placeholder="Cari buku..."
-              className="w-full border border-gray-300 rounded-lg pl-10 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-green-700 transition-all"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleSearch(e);
-              }}
+              placeholder={`Cari...`}
+              className="w-full border border-gray-300 rounded-lg pl-10 pr-10 py-2 focus:outline-none  transition-all"
+              onKeyDown={(e) => e.key === "Enter" && handleSearch(e)}
             />
 
             {/* Tombol Clear */}
@@ -55,12 +68,12 @@ const MenuHomePage = () => {
             )}
           </div>
 
+          {/* 🔹 Tombol Cari */}
           <button
             type="submit"
             className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-800 transition-all flex items-center gap-2"
           >
             <FaSearch className="text-white text-lg" />
-            Cari
           </button>
         </form>
 
@@ -70,28 +83,24 @@ const MenuHomePage = () => {
             onClick={() => (window.location.href = "/katalog/buku")}
             className="flex flex-col hover:border-yellow-400 border-4 border-gray-100 items-center justify-center text-black py-4 rounded-xl font-semibold shadow hover:bg-gray-200 transition-all"
           >
-            <div>
-              <img
-                src={bukufisik}
-                alt="Pustaka Fisik"
-                className="md:w-72 w-40 h-40 md:h-52"
-              />
-              <p className="uppercase font-bold">Pustaka Fisik</p>
-            </div>
+            <img
+              src={bukufisik}
+              alt="Pustaka Fisik"
+              className="md:w-72 w-40 h-40 md:h-52"
+            />
+            <p className="uppercase font-bold">Pustaka Fisik</p>
           </button>
 
           <button
             onClick={() => (window.location.href = "/katalog/ebuku")}
             className="flex flex-col hover:border-yellow-400 border-4 border-gray-100 items-center justify-center text-black py-4 rounded-xl font-semibold shadow hover:bg-gray-200 transition-all"
           >
-            <div className="flex flex-col items-center">
-              <img
-                src={bukudigital}
-                alt="Pustaka Digital"
-                className="md:w-72 w-40 h-40 md:h-52"
-              />
-              <p className="uppercase font-bold">Pustaka Digital</p>
-            </div>
+            <img
+              src={bukudigital}
+              alt="Pustaka Digital"
+              className="md:w-72 w-40 h-40 md:h-52"
+            />
+            <p className="uppercase font-bold">Pustaka Digital</p>
           </button>
         </div>
       </div>

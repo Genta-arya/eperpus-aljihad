@@ -44,7 +44,7 @@ const Filter = ({
           <select
             value={kategori}
             onChange={(e) => setKategori(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg p-2 text-sm shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
+            className="w-full border border-gray-300 rounded-lg p-2 text-sm shadow-sm focus:ring-2 focus:outline-none"
           >
             <option value="">Semua Kategori</option>
             {kategoriList.map((item) => (
@@ -60,7 +60,7 @@ const Filter = ({
           <select
             value={unitPendidikan}
             onChange={(e) => setUnitPendidikan(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg p-2 text-sm shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
+            className="w-full border border-gray-300 rounded-lg p-2 text-sm shadow-sm focus:ring-2  focus:outline-none"
           >
             <option value="">Semua Unit Pendidikan</option>
             {unitList.map((item) => (

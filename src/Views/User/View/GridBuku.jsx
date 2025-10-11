@@ -1,10 +1,30 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const GridBuku = ({ data }) => {
+const GridBuku = ({ data, path }) => {
+  const slugify = (text) => {
+    if (!text) return "";
+
+    let cleanText = text.replace(/<[^>]+>/g, "");
+
+    cleanText = cleanText.trim().replace(/\s+/g, "-");
+
+    cleanText = cleanText.replace(/[^a-zA-Z0-9-]/g, "");
+
+    return cleanText.toLowerCase();
+  };
+  const link = path === "/katalog/buku" ? "buku" : "ebuku";
+  console.log(path);
+  console.log(link);
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 md:gap-6 gap-2">
       {data.map((item) => (
-        <div key={item.id} className="">
+        <Link
+          to={`/detail/${link}/${item.id}/${slugify(item.judul)}`}
+          key={item.id}
+          className="hover:scale-105 transition-all duration-300 cursor-pointer"
+        >
           <div className="">
             <img
               src={
@@ -25,7 +45,7 @@ const GridBuku = ({ data }) => {
           </div>
 
           {/* Efek overlay saat hover */}
-        </div>
+        </Link>
       ))}
     </div>
   );
