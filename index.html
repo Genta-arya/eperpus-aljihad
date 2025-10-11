@@ -1,17 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/Icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>E-Perpus Al-Jihad Ketapang</title>
-  </head>
-  <body>
-    <div id="root"></div>
+
+    <!-- ✅ Title dan Deskripsi -->
+    <title>E-Perpus Al-Jihad Ketapang | Perpustakaan Digital Terpadu</title>
+    <meta
+      name="description"
+      content="E-Perpus Al-Jihad Ketapang adalah platform perpustakaan digital dan fisik yang menyediakan akses mudah ke buku dan e-book Islami, pendidikan, dan umum."
+    />
+
+    <!-- ✅ Favicon -->
+    <link rel="icon" type="image/png" href="/Icon.png" />
+
+    <!-- ✅ Keyword & Penulis -->
+    <meta
+      name="keywords"
+      content="perpustakaan digital, e-perpus, al jihad ketapang, buku islami, ebook pendidikan, pustaka online"
+    />
+    <meta name="author" content="E-Perpus Al-Jihad Ketapang" />
+
+    <!-- ✅ Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://eperpus.aljihadketapang.sch.id/" />
+    <meta
+      property="og:title"
+      content="E-Perpus Al-Jihad Ketapang | Perpustakaan Digital Islami"
+    />
+    <meta
+      property="og:description"
+      content="Temukan koleksi buku fisik dan digital terbaik di E-Perpus Al-Jihad Ketapang."
+    />
+    <meta property="og:image" content="/Icon.png" />
+
+    <!-- ✅ Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="E-Perpus Al-Jihad Ketapang | Perpustakaan Digital Terpadu"
+    />
+    <meta
+      name="twitter:description"
+      content="Perpustakaan digital dan fisik untuk semua kalangan — Islami, pendidikan, dan umum."
+    />
+    <meta name="twitter:image" content="/Icon.png" />
+
+    <!-- ✅ Canonical URL -->
+    <link rel="canonical" href="https://eperpus.aljihadketapang.sch.id/" />
+
+    <!-- ✅ Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Library",
+        "name": "E-Perpus Al-Jihad Ketapang",
+        "url": "https://eperpus.aljihadketapang.sch.id/",
+        "logo": "https://eperpus.aljihadketapang.sch.id/Icon.png",
+        "description": "Platform perpustakaan digital dan fisik yang menyediakan koleksi buku Islami, pendidikan, dan umum.",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Jl. Al-Jihad No. 45, Ketapang",
+          "addressLocality": "Ketapang",
+          "addressRegion": "Kalimantan Barat",
+          "postalCode": "78813",
+          "addressCountry": "ID"
+        },
+        "sameAs": [
+          "https://facebook.com/aljihadketapang",
+          "https://instagram.com/aljihadketapang"
+        ]
+      }
+    </script>
+
+    <!-- ✅ Tailwind dan Google API -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script async defer src="https://apis.google.com/js/api.js"></script>
     <script async defer src="https://accounts.google.com/gsi/client"></script>
+  </head>
 
+  <body>
+    <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
