@@ -85,7 +85,7 @@ const PustakaSpoiler = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-6 gap-3">
           {loading ? (
             Array(4)
               .fill(0)
@@ -103,7 +103,7 @@ const PustakaSpoiler = () => {
                     src={buku.cover}
                     onError={() => setImgError(true)}
                     alt={buku.judul}
-                    className="w-full h-96 mb-4 rounded-md shadow-xl drop-shadow-lg hover:scale-95 duration-300 shadow-black"
+                    className="w-full md:h-96 h-64 mb-4 rounded-md shadow-xl drop-shadow-lg hover:scale-95 duration-300 shadow-black"
                   />
                 )}
                 <div className="p-2 flex flex-col flex-1">
@@ -144,7 +144,7 @@ const PustakaSpoiler = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-6 gap-3">
           {loading ? (
             Array(4)
               .fill(0)
@@ -162,7 +162,7 @@ const PustakaSpoiler = () => {
                     src={ebuku.cover}
                     onError={() => setImgError(true)}
                     alt={ebuku.judul}
-                    className="w-full h-96 mb-4 rounded-md shadow-xl drop-shadow-lg hover:scale-95 duration-300 shadow-black"
+                    className="w-full md:h-96 h-64 mb-4 rounded-md shadow-xl drop-shadow-lg hover:scale-95 duration-300 shadow-black"
                   />
                 )}
 

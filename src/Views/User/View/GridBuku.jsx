@@ -25,7 +25,7 @@ const GridBuku = ({ data, path }) => {
           key={item.id}
           className=" cursor-pointer"
         >
-          <div className="w-full h-96 border-2 bg-gray-200 overflow-hidden rounded-lg group">
+          <div className="w-full md:h-96 h-64 border-2 bg-gray-200 overflow-hidden rounded-lg group">
             <img
               src={
                 item.cover ||
