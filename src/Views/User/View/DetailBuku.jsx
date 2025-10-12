@@ -206,7 +206,7 @@ const DetailBuku = () => {
               )}
 
               <div className={`p-3 bg-gray-50 rounded-lg text-center  ${type === "buku" ? "col-span-2 md:col-span-2" : "md:col-span-1"} `}>
-                <p className="text-sm text-gray-500">Tanggal Tambah</p>
+                <p className="text-sm text-gray-500">Post at</p>
                 <p className="text-sm font-medium text-gray-700">
                   {new Date(data.createdAt).toLocaleDateString("id-ID", {
                     day: "2-digit",
