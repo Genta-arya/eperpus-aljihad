@@ -18,14 +18,14 @@ const GridBuku = ({ data, path }) => {
   console.log(link);
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 md:gap-6 gap-2">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 md:gap-6 gap-2">
       {data.map((item) => (
         <Link
           to={`/detail/${link}/${item.id}/${slugify(item.judul)}`}
           key={item.id}
-          className="hover:scale-105 transition-all duration-300 cursor-pointer"
+          className=" cursor-pointer"
         >
-          <div className="">
+          <div className="w-full h-96 border-2 bg-gray-200 overflow-hidden rounded-lg group">
             <img
               src={
                 item.cover ||

@@ -20,9 +20,8 @@ const MenuHomePage = () => {
     e.preventDefault();
     if (searchText.trim() !== "") {
       // arahkan ke halaman sesuai jenis buku
-      window.location.href = `/katalog/${searchType}?q=${encodeURIComponent(
-        searchText
-      )}`;
+      navigate(`/katalog/${searchType}?q=${encodeURIComponent(searchText)}`);
+    
     }
   };
 

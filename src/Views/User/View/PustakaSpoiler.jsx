@@ -14,8 +14,8 @@ const PustakaSpoiler = () => {
   const fetchBuku = async () => {
     try {
       setLoading(true);
-      const bukuData = await getBuku("buku?page=1&limit=4");
-      const ebukuData = await getBuku("ebuku?page=1&limit=4");
+      const bukuData = await getBuku("buku?page=1&limit=8");
+      const ebukuData = await getBuku("ebuku?page=1&limit=8");
       setBukus(bukuData?.data.data || []);
       setEbukus(ebukuData?.data.data || []);
     } catch (err) {
@@ -66,7 +66,7 @@ const PustakaSpoiler = () => {
     );
 
   return (
-    <div className="px-3 md:px-24 md:mt-20 mt-10">
+    <div className="px-3 md:px-12 lg:px-24 md:mt-20 mt-10">
       {/* Buku Fisik */}
       <div>
         <div className="flex justify-between items-center mb-4">
@@ -85,7 +85,7 @@ const PustakaSpoiler = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {loading ? (
             Array(4)
               .fill(0)
@@ -103,7 +103,7 @@ const PustakaSpoiler = () => {
                     src={buku.cover}
                     onError={() => setImgError(true)}
                     alt={buku.judul}
-                    className="w-full mb-4 rounded-md shadow-xl drop-shadow-lg hover:scale-95 duration-300 shadow-black"
+                    className="w-full h-96 mb-4 rounded-md shadow-xl drop-shadow-lg hover:scale-95 duration-300 shadow-black"
                   />
                 )}
                 <div className="p-2 flex flex-col flex-1">
@@ -151,10 +151,10 @@ const PustakaSpoiler = () => {
               .map((_, i) => <SkeletonCard key={i} />)
           ) : ebukus.length > 0 ? (
             ebukus.map((ebuku) => (
-              <div
+              <Link
                 key={ebuku.id}
                 className="flex flex-col w-full cursor-pointer"
-                onClick={() => window.open(ebuku.file, "_blank")}
+                to={`/detail/ebuku/${ebuku.id}/${slugify(ebuku.judul)}`}
               >
                 {imgError && <ImagePlaceholder />}
                 {!imgError && (
@@ -162,7 +162,7 @@ const PustakaSpoiler = () => {
                     src={ebuku.cover}
                     onError={() => setImgError(true)}
                     alt={ebuku.judul}
-                    className="w-full mb-4 rounded-md shadow-xl drop-shadow-lg hover:scale-95 duration-300 shadow-black"
+                    className="w-full h-96 mb-4 rounded-md shadow-xl drop-shadow-lg hover:scale-95 duration-300 shadow-black"
                   />
                 )}
 
@@ -178,7 +178,7 @@ const PustakaSpoiler = () => {
                       : ebuku.judul}
                   </h3>
                 </div>
-              </div>
+              </Link>
             ))
           ) : (
             <p>Tidak ada e-buku</p>

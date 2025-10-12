@@ -10,7 +10,7 @@ const RelateBook = ({ kategori, currentId }) => {
   const fetchRelate = async () => {
     try {
       const response = await getBuku(
-        `${type}?kategori=${kategori}&page=1&limit=9`
+        `${type}?kategori=${kategori}&page=1&limit=11`
       );
 
       const allBooks = response.data?.data || [];
@@ -39,7 +39,8 @@ const RelateBook = ({ kategori, currentId }) => {
           grid 
           grid-cols-2 
           sm:grid-cols-3 
-          md:grid-cols-4 
+          md:grid-cols-4
+          lg:grid-cols-6
           gap-4
         "
       >
@@ -72,7 +73,7 @@ const RelateBook = ({ kategori, currentId }) => {
                 "https://via.placeholder.com/150x220?text=No+Cover"
               }
               alt={book.judul}
-              className="rounded-lg w-40 h-56  mb-3"
+              className="rounded-lg  w-40 h-56  mb-3"
             />
             <div className="text-center">
               <p className="text-sm text-gray-500 mt-1">{book.penulis}</p>

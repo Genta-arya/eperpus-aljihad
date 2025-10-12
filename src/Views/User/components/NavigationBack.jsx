@@ -6,11 +6,7 @@ const NavigationBack = ({ titles }) => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    if (window.history.length > 1) {
-      navigate(-1); // kembali ke halaman sebelumnya
-    } else {
-      navigate("/"); // jika tidak ada history
-    }
+    navigate("/")
   };
 
   return (
